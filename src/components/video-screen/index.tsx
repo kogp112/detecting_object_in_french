@@ -27,31 +27,22 @@ class VideoScreen extends React.Component<Props> {
   // take capture when push button
   capture () {
     const { click } = this.state;
-    console.log(click, 'capture')
+    
     if (click) {
-      this.stopCapture;
+      this.setState({
+        click: false
+      });
+      clearInterval(this.data);
     } else {
-      this.startCapture;
+      this.setState({
+        click: true
+      })
+      this.data = setInterval(() => {
+        // ATTENSION getUserMedia only allow http at localhost, basically use HTTPS
+        const imgSrc = this.refs.webcam.getScreenshot();
+        console.log(imgSrc);
+      }, 1000);
     }
-  }
-  
-  startCapture() {
-    console.log(this.state, 'startCapture')
-    //this.setState({
-    //  click: false
-    //});
-    this.data = setInterval(function() {
-      // ATTENSION getUserMedia only allow http at localhost, basically use HTTPS
-      console.log(this.refs.webcam.getScreenshot());
-    }, 1000);
-  }
-  
-  stopCapture() {
-    console.log(this.state, 'stopCapture')
-    this.setState({
-      click: true
-    });
-    clearInterval(this.data);
   }
   
   render () {
@@ -77,7 +68,7 @@ class VideoScreen extends React.Component<Props> {
             <Grid container>
               <Webcam
                 audio={false}
-                ref='webcamRef'
+                ref={"webcam"}
                 screenshotFormat="image/jpeg"
                 videoConstraints={this.videoConstraints}
               />
