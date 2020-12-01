@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import Button from "@material-ui/core/Button";
-
+import { Container } from "@material-ui/core";
 class VideoScreen extends React.Component<Props> {
   data: NodeJS.Timeout;
   constructor(props: Props) {
@@ -16,7 +16,7 @@ class VideoScreen extends React.Component<Props> {
       click: false,
     };
   }
-  
+
    // video settings
   videoConstraints = {
     width: 850,
@@ -39,39 +39,45 @@ class VideoScreen extends React.Component<Props> {
       })
       this.data = setInterval(() => {
         // ATTENSION getUserMedia only allow http at localhost, basically use HTTPS
-        const imgSrc = this.refs.webcam.getScreenshot();
-        console.log(imgSrc);
+        this.refs.webcam.getScreenshot();
+        console.log('あ');
       }, 1000);
     }
   }
   
   render () {
     return (
-      <React.Fragment>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton edge="start" color="inherit" aria-label="menu">
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6">
-              Recognition App
-            </Typography>
-          </Toolbar>
-        </AppBar>
+      <>
+        <Grid container>
+          <Grid item xs={12}>
+            <AppBar position="static">
+              <Toolbar>
+                <IconButton edge="start" color="default" aria-label="menu">
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="h6">
+                  Recognition App
+                </Typography>
+              </Toolbar>
+            </AppBar>
+          </Grid>
+        </Grid>
         <Grid container>
           <Grid item xs={2}>
             <Grid container>
-              <Button onClick={this.capture.bind(this)}>START</Button>
+              <Button variant="contained" color="primary" onClick={this.capture.bind(this)}>START</Button>
             </Grid>
           </Grid>
           <Grid item xs={8}>
             <Grid container>
-              <Webcam
-                audio={false}
-                ref={"webcam"}
-                screenshotFormat="image/jpeg"
-                videoConstraints={this.videoConstraints}
-              />
+              <Container fixed>
+                <Webcam
+                  audio={false}
+                  ref={"webcam"}
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={this.videoConstraints}
+                />
+              </Container>
             </Grid>
           </Grid>
           <Grid item xs={2}>
@@ -82,7 +88,7 @@ class VideoScreen extends React.Component<Props> {
             </Grid>
           </Grid>
         </Grid>
-      </React.Fragment>
+      </>
     )
   }
 }
