@@ -19,8 +19,8 @@ class VideoScreen extends React.Component<Props> {
 
    // video settings
   videoConstraints = {
-    width: 850,
-    height: 700,
+    width: 350,
+    height: 350,
     facingMode: "user"
   };
   
@@ -65,19 +65,17 @@ class VideoScreen extends React.Component<Props> {
         <Grid container>
           <Grid item xs={2}>
             <Grid container>
-              <Button variant="contained" color="primary" onClick={this.capture.bind(this)}>START</Button>
+              <Button variant="contained" color="default" onClick={this.capture.bind(this)}>START</Button>
             </Grid>
           </Grid>
-          <Grid item xs={8}>
-            <Grid container>
-              <Container fixed>
-                <Webcam
-                  audio={false}
-                  ref={"webcam"}
-                  screenshotFormat="image/jpeg"
-                  videoConstraints={this.videoConstraints}
-                />
-              </Container>
+          <Grid item xs={8} alignItems={'center'}>
+            <Grid container alignContent={'center'} justify={'center'}>
+              <Webcam
+                audio={false}
+                ref={"webcam"}
+                screenshotFormat="image/jpeg"
+                videoConstraints={this.videoConstraints}
+              />
             </Grid>
           </Grid>
           <Grid item xs={2}>
