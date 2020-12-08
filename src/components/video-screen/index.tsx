@@ -8,15 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import Button from "@material-ui/core/Button";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import orange from '@material-ui/core/colors/orange';
+//import orange from '@material-ui/core/colors/orange';
 import { Box } from "@material-ui/core";
 
 const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: orange[500],
-    }
-  },
   spacing: 8
 });
 class VideoScreen extends React.Component<Props> {
@@ -25,6 +20,7 @@ class VideoScreen extends React.Component<Props> {
     super(props);
     this.state = {
       click: false,
+      status: 'START'
     };
   }
 
@@ -41,12 +37,14 @@ class VideoScreen extends React.Component<Props> {
     
     if (click) {
       this.setState({
-        click: false
+        click: false,
+        status: 'START'
       });
       clearInterval(this.data);
     } else {
       this.setState({
-        click: true
+        click: true,
+        status: 'STOP'
       })
       this.data = setInterval(() => {
         // ATTENSION getUserMedia only allow http at localhost, basically use HTTPS
@@ -57,14 +55,15 @@ class VideoScreen extends React.Component<Props> {
   }
   
   render () {
+    const { status } = this.state;
     return (
       <>
         <ThemeProvider theme={theme}>
           <Grid container>
             <Grid item xs={12}>
-              <AppBar position="static">
+              <AppBar position="static" style={{ color: "#e0f2f1", backgroundColor: "#ff6f00" }}>
                 <Toolbar>
-                  <IconButton edge="start" color="default" aria-label="menu">
+                  <IconButton edge="start"aria-label="menu">
                     <MenuIcon />
                   </IconButton>
                   <Typography variant="h6">
@@ -78,7 +77,7 @@ class VideoScreen extends React.Component<Props> {
             <Grid item xs={2}>
               <Grid container>
                 <Box mt={2} ml={4}>
-                  <Button variant="contained" color="default" onClick={this.capture.bind(this)}>START</Button>
+                  <Button variant="contained" style={{ color: status == 'STOP' ? "#263238": "#e0f2f1", backgroundColor: status == 'STOP' ? "#4fc3f7": "#0277bd" }} onClick={this.capture.bind(this)}>{status}</Button>
                 </Box>
               </Grid>
             </Grid>
@@ -110,6 +109,7 @@ class VideoScreen extends React.Component<Props> {
 
 interface Props {
   click: boolean,
+  status: string
 }
 
 export default VideoScreen;
