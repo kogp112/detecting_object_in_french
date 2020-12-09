@@ -1,4 +1,7 @@
 import * as React from "react";
+import Amplify from "aws-amplify";
+import Predictions, { AmazonAIPredictionsProvider } from "@aws-amplify/predictions";
+import awsconfig from "../../aws-exports";
 import Webcam from "react-webcam";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,13 +11,13 @@ import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import Button from "@material-ui/core/Button";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-//import orange from '@material-ui/core/colors/orange';
 import { Box } from "@material-ui/core";
 
 const theme = createMuiTheme({
   spacing: 8
 });
 class VideoScreen extends React.Component<Props> {
+  
   data: NodeJS.Timeout;
   constructor(props: Props) {
     super(props);
@@ -34,7 +37,9 @@ class VideoScreen extends React.Component<Props> {
   // take capture when push button
   capture () {
     const { click } = this.state;
-    
+    Amplify.configure(awsconfig);
+    Amplify.addPluggable(new AmazonAIPredictionsProvider());
+  
     if (click) {
       this.setState({
         click: false,
@@ -48,9 +53,19 @@ class VideoScreen extends React.Component<Props> {
       })
       this.data = setInterval(() => {
         // ATTENSION getUserMedia only allow http at localhost, basically use HTTPS
-        this.refs.webcam.getScreenshot();
-        console.log('あ');
-      }, 1000);
+        let image = this.refs.webcam.getScreenshot();
+        Predictions.identify({
+            labels: {
+                source: { image },
+                type: "ALL"
+            }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => console.log({ err }));
+          console.log('あ');
+        }, 1000);
     }
   }
   

@@ -40,7 +40,13 @@ module.exports = {
           ],
           exclude: [resolve(__dirname, "node_modules")],
         },
-        { test: /\.txt$/, use: 'raw-loader' }
+        { test: /\.txt$/, use: 'raw-loader' },
+        {
+          test: /\.m?js/,
+          resolve: {
+              fullySpecified: false
+          }
+        }
       ]
     },
     plugins: [
